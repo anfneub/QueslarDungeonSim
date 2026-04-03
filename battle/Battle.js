@@ -750,7 +750,13 @@ export class Battle {
       }
 
       // damage amount
-      let dmg_amount = target_defense * (1 - additional_dr) * attacker_damage * damage_mult;
+      let dmg_amount;
+      if (thorns > 0) {
+        dmg_amount = target_defense * (1 - additional_dr) * (1 - thorns / 100.0) * attacker_damage * damage_mult;
+      } else {
+        dmg_amount = target_defense * (1 - additional_dr) * attacker_damage * damage_mult;
+      }
+      let dmg_for_thorns = target_defense * (1 - additional_dr) * attacker_damage * damage_mult;
       let damage_info_key = "DAMAGE_INFO";
 
       // crit roll
@@ -765,6 +771,7 @@ export class Battle {
         );
       if (rng_crit < attacker_crit_chance) {
         dmg_amount = dmg_amount * (1 + attacker_crit_damage);
+        dmg_for_thorns = dmg_for_thorns * (1 + attacker_crit_damage);
         damage_info_key = "DAMAGE_INFO_CRIT";
       }
       const dmg_final = Math.floor(dmg_amount);
@@ -784,6 +791,7 @@ export class Battle {
       target.current_health = Math.max(0.0, target.current_health - dmg_applied);
 
       // lifesteal
+
       if (attacker instanceof Fighter && (lifesteal > 0)) {
         let lifesteal_amount = Math.floor(dmg_real * lifesteal / 100);
         attacker.current_health = Math.min(attacker.current_health + lifesteal_amount, attacker.total_health);
@@ -792,7 +800,7 @@ export class Battle {
 
       // thorns
       if (target instanceof Fighter && (thorns > 0)) {
-        let thorns_damage = Math.floor(dmg_applied * thorns / 100);
+        let thorns_damage = Math.floor(dmg_for_thorns * thorns / 100);
         attacker.current_health = Math.max(0.0, attacker.current_health - thorns_damage);
         if (this.verbose >= 1) { this._draw_table_head(formatString(this.I18N.getBattleMsg("THORNS"), attacker_name, target_name, thorns_damage)) };
       }
