@@ -1,4 +1,7 @@
 2026-04-02
+- Fixed Brawler and Multistrike interaction
+
+2026-04-02
 - Modified Thorns as per patch 1.1.1.0 (The damage returned by the thorns fighter equipment implicit is now also reducing damage taken.)
 
 2026-03-23

@@ -251,7 +251,7 @@ export class Battle {
 
           if (attacker.multistrike > 0) {
             const rng_multistrike_brawler = Math.random();
-            if (rng_multistrike_brawler < multistrike) {
+            if (rng_multistrike_brawler < attacker.multistrike) {
               if (this.verbose >= 1)
                 this._draw_table_head(this.I18N.getBattleMsg("MULTISTRIKE2"));
               this._do_standard_attack(attacker, target);
