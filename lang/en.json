@@ -173,7 +173,7 @@
     "ERR_FAIL_LOAD_ARMORY": "Failed to load armory state:",
     "ERR_GRID_FULL": "Could not place fighter: {0} - grid is full",
     "ERR_UNKNOWN_EQUIP_STAT": "Unknown equipment stat type: {0} with value: {1}",
-    "WARN_EQUIP_TIER_EXCEEDS_MAX": "Equipment stat has tier {0} which is above max (12), using default multiplier 1.0",
+    "WARN_EQUIP_TIER_EXCEEDS_MAX": "Equipment stat has tier {0} which is above max {1}, using default multiplier 1.0",
     "ERR_FAIL_LOAD_CHANGELOG": "Failed to load changelog:"
   },
   "Alerts": {

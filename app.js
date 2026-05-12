@@ -5,7 +5,7 @@ import { Battle } from "./battle/Battle.js";
 import { Fighter, FighterClasses } from "./characters/Fighter.js";
 import { I18nManager, formatString } from "./utils/i18n.js";
 import { ArmoryItem } from "./armory/ArmoryItem.js";
-import { calculateFighterCost, millify, calculateTierLevel } from "./utils/utils.js";
+import { calculateFighterCost, millify, calculateTierLevel, MAX_TIER } from "./utils/utils.js";
 
 // --- GLOBAL SHARED ELEMENTS ---
 const importConfirmModal = document.getElementById("importConfirmModal");
@@ -766,7 +766,7 @@ class DungeonSim {
             input.type = "number";
             input.dataset.statType = statType;
             input.min = "0";
-            input.max = "12";
+            input.max = MAX_TIER;
             input.value = tierValue;
             input.addEventListener("input", () => this.calculateAndDisplayTieredStats());
             statRow.appendChild(input);
@@ -1632,12 +1632,12 @@ class DungeonSim {
 }
 
 function calculateStatValue(stat) {
-    const tierMultipliers = { 1: 1.1, 2: 1.2, 3: 1.3, 4: 1.4, 5: 1.5, 6: 1.75, 7: 2, 8: 2.25, 9: 2.5, 10: 2.75, 11: 3, 12: 3.5 };
+    const tierMultipliers = { 1: 1.1, 2: 1.2, 3: 1.3, 4: 1.4, 5: 1.5, 6: 1.75, 7: 2, 8: 2.25, 9: 2.5, 10: 2.75, 11: 3, 12: 3.5, 13: 3.75, 14: 4, 15: 4.25, 16: 4.5};
     if (!stat?.type) return 0;
 
     const tier = Math.max(1, parseInt(stat.tier) || 1);
     const multiplier = tierMultipliers[tier] || 1.0;
-    if (tier > 12) console.warn(formatString(I18N.getConsoleMsg("WARN_EQUIP_TIER_EXCEEDS_MAX"), tier));
+    if (tier > MAX_TIER) console.warn(formatString(I18N.getConsoleMsg("WARN_EQUIP_TIER_EXCEEDS_MAX"), tier, MAX_TIER));
 
     const baseValue = Math.max(0, parseFloat(stat.value) || 0);
 

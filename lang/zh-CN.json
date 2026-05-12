@@ -173,7 +173,7 @@
     "ERR_FAIL_LOAD_ARMORY": "无法加载兵工厂状态：",
     "ERR_GRID_FULL": "无法放置佣兵：{0} - 阵型已满",
     "ERR_UNKNOWN_EQUIP_STAT": "未知装备属性类型：{0} 值为：{1}",
-    "WARN_EQUIP_TIER_EXCEEDS_MAX": "装备属性层级 {0} 超过最大值 (12)，使用默认乘数 1.0",
+    "WARN_EQUIP_TIER_EXCEEDS_MAX": "装备属性层级 {0} 超过最大值 {1}，使用默认乘数 1.0",
     "ERR_FAIL_LOAD_CHANGELOG": "无法加载更新日志："
   },
   "Alerts": {

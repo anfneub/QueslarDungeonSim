@@ -93,7 +93,7 @@ export function calculateFighterCost(fighterStats) {
     costOfLvl(fighter_dodge);
 }
 
-
+export const MAX_TIER = 16;
 
 export function calculateTierLevel(stat, level, tier) {
   const tierMultipliers = {
@@ -109,6 +109,10 @@ export function calculateTierLevel(stat, level, tier) {
     10: 2.75,
     11: 3,
     12: 3.5,
+    13: 3.75,
+    14: 4,
+    15: 4.25,
+    16: 4.5
   };
   if (stat === 'health') return (50 + Math.sqrt(level) * level / 3 * 50) * 100 * tierMultipliers[tier];
   if (stat === 'damage') return (25 + Math.sqrt(level) * level / 3 * 25) * 25 * tierMultipliers[tier]
