@@ -383,7 +383,7 @@ export class Battle {
 
           if (f.fighter_class === FighterClasses.CRUSADER) {
             this.update_dead_fighters();
-            regen_amount = Math.round((1 + 0.2 * this.dead_fighters.length) * regen_amount);
+            // regen_amount = Math.round((1 + 0.2 * this.dead_fighters.length) * regen_amount);
           }
 
           f.current_health = Math.min(f.current_health + regen_amount, f.total_health);
@@ -410,7 +410,7 @@ export class Battle {
             let healing_amount = f.healing;
             if (f.fighter_class === FighterClasses.CRUSADER) {
               this.update_dead_fighters();
-              healing_amount = Math.round((1 + 0.2 * this.dead_fighters.length) * healing_amount);
+              // healing_amount = Math.round((1 + 0.2 * this.dead_fighters.length) * healing_amount);
             }
 
             selectedFighter.current_health = Math.min(selectedFighter.current_health + healing_amount, selectedFighter.total_health);
@@ -654,9 +654,8 @@ export class Battle {
       target instanceof Fighter &&
       target.fighter_class === FighterClasses.CRUSADER
     ) {
-      target.total_health = Math.round(target.original_health * (1 + 0.2 * this.dead_fighters.length));
-      target_defense_pre =
-        (1 + 0.2 * this.dead_fighters.length) * target.defense_pre;
+      // target.total_health = Math.round(target.original_health * (1 + 0.2 * this.dead_fighters.length));
+      // target_defense_pre = (1 + 0.2 * this.dead_fighters.length) * target.defense_pre;
       target_defense = 1 - calculateDefense(target_defense_pre);
       target_dodge = (1 + 0.2 * this.dead_fighters.length) * target_dodge;
     }
@@ -666,7 +665,7 @@ export class Battle {
       attacker instanceof Fighter &&
       attacker.fighter_class === FighterClasses.CRUSADER
     ) {
-      attacker.total_health = Math.round(attacker.original_health * (1 + 0.2 * this.dead_fighters.length));
+      // attacker.total_health = Math.round(attacker.original_health * (1 + 0.2 * this.dead_fighters.length));
       attacker_hit = (1 + 0.2 * this.dead_fighters.length) * attacker_hit;
       attacker_damage = (1 + 0.2 * this.dead_fighters.length) * attacker_damage;
       attacker_crit_damage = (1 + 0.2 * this.dead_fighters.length) * attacker_crit_damage;
