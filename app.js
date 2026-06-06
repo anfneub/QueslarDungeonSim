@@ -1459,11 +1459,12 @@ class DungeonSim {
                     return { ...statObject, value: calculateStatValue(stat) };
                 }) : [];
 
-                const existingItemIndex = this.armoryState.findIndex(item => item.name === apiItemData.name);
+                const existingItemIndex = this.armoryState.findIndex(item => item.id === apiItemData._id);
 
                 if (existingItemIndex !== -1) {
                     Object.assign(this.armoryState[existingItemIndex], {
                         id: apiItemData._id,
+                        name: apiItemData.customName ?? apiItemData.name,
                         rarity: apiItemData.rarity,
                         stats: calculatedStats,
                         level: apiItemData.level || 1,
