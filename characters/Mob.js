@@ -13,10 +13,18 @@ export function getMobStatValue(baseValue, baseIncrement, level) {
   let totalValue = baseValue + baseIncrement * 600;
   let currentLevel = level - 600;
   let increment = 2 * baseIncrement;
-  while (currentLevel > 200) {
-    totalValue += increment * 200;
-    currentLevel -= 200;
-    increment += baseIncrement;
+  let processedLevel = 600;
+
+  while (currentLevel > 300) {
+    totalValue += increment * 300;
+    currentLevel -= 300;
+    processedLevel += 300;
+
+    if (processedLevel >= 2400) {
+      // Limit additional growth in scaling
+    } else {
+      increment += baseIncrement;
+    }
   }
 
   return totalValue + currentLevel * increment;
