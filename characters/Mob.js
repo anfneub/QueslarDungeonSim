@@ -20,7 +20,7 @@ export function getMobStatValue(baseValue, baseIncrement, level) {
     currentLevel -= 300;
     processedLevel += 300;
 
-    if (processedLevel >= 2400) {
+    if (processedLevel >= 2100) {
       // Limit additional growth in scaling
     } else {
       increment += baseIncrement;

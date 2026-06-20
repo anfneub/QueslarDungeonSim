@@ -1,4 +1,7 @@
 2026-06-17
+- Corrected max level before scaling stops from 2400 to 2100 
+
+2026-06-17
 - Adjusted mobs stat scaling as per patch 1.2.0.0
 
 2026-06-06
