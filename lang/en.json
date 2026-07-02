@@ -218,7 +218,7 @@
     "SP_BR_DOUBLE": "Brawler attacked twice!",
     "SP_PL_DMG_REDUCTION": "Paladin aura adds 15% damage reduction",
     "SP_BS_DMG_DODGE": "Bastion aura adds 25% damage reduction and 50% increased dodge",
-    "PRIEST_RESURRECTED": "Priest resurrected {0} at 10% hp",
+    "PRIEST_RESURRECTED": "Priest resurrected {0}({1}) for 25% of Max Health",
     "ERR_IVLD_TGT_ID": "No valid target found for {0} attack",
     "ERR_IVLD_ATKR": "Invalid attacker",
     "ERR_IVLD_TGT": "Invalid target"

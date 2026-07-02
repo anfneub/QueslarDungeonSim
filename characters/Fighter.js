@@ -77,4 +77,10 @@ export class Fighter {
     this.base = base;
     this.equippedItemId = equippedItemId;
   }
+
+
+  toString() {
+    return `I am ${this.name}, a ${this.fighter_class} with Health: ${this.current_health}/${this.total_health}, Damage: ${this.damage}, Hit: ${this.hit}, Defense: ${(100 * this.defense).toFixed(2)}%, Crit Chance: ${(100 * this.crit_chance).toFixed(2)}%, Crit Damage: ${(100 * this.crit_damage).toFixed(2)}%, Dodge: ${this.dodge}%`;
+  }
+
 }

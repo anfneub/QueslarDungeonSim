@@ -218,7 +218,7 @@
     "SP_BR_DOUBLE": "格斗家造成了两次伤害！",
     "SP_PL_DMG_REDUCTION": "圣骑士的光环提供了15%减伤",
     "SP_BS_DMG_DODGE": "堡垒的光环提供了25%的减伤和50%额外闪避概率",
-    "PRIEST_RESURRECTED": "牧师复活了 {0}",
+    "PRIEST_RESURRECTED": "牧师复活了 {0}({1}) 为最大生命值的25%",
     "ERR_IVLD_TGT_ID": "{0} 的攻击没有有效目标",
     "ERR_IVLD_ATKR": "无效的攻击者",
     "ERR_IVLD_TGT": "无效的目标"

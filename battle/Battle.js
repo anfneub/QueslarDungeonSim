@@ -67,6 +67,11 @@ export class Battle {
   }
 
   battle() {
+    console.log(this.fighters.all_fighters[0][0]);
+    console.log("\n");
+    console.log(this.fighters.all_fighters[1][1]);
+
+
     while (this.continue_flag) {
       this._do_one_round();
       if (this.current_round > 300) break;
@@ -454,6 +459,7 @@ export class Battle {
             formatString(
               this.I18N.getBattleMsg("PRIEST_RESURRECTED"),
               resurrected_fighter.name,
+              resurrected_fighter.fighter_class,
             ),
             true,
           );
@@ -799,7 +805,8 @@ export class Battle {
 
       // thorns
       if (target instanceof Fighter && (thorns > 0)) {
-        let thorns_damage = Math.floor(dmg_for_thorns * thorns / 100);
+        let thorns_damage = Math.round(dmg_for_thorns * thorns / 100);
+        // let thorns_damage = Math.floor(dmg_for_thorns * thorns / 100);
         attacker.current_health = Math.max(0.0, attacker.current_health - thorns_damage);
         if (this.verbose >= 1) { this._draw_table_head(formatString(this.I18N.getBattleMsg("THORNS"), attacker_name, target_name, thorns_damage)) };
       }
@@ -940,17 +947,19 @@ export class Battle {
     ]) {
       const fighter = this.fighters.all_fighters[i][j];
       if (fighter !== null)
-        d.push({ i, j, type: "fighters", hit: fighter.hit });
-      else d.push({ i, j, type: "fighters", hit: 0.0 });
+        d.push({ i, j, type: "fighters", hit: fighter.hit, name: fighter.name || "" });
+      else d.push({ i, j, type: "fighters", hit: 0.0, name: "" });
 
       const mob = this.mobs.mobs[i][j];
-      if (mob !== null) d.push({ i, j, type: "mobs", hit: mob.hit });
-      else d.push({ i, j, type: "mobs", hit: 0.0 });
+      if (mob !== null) d.push({ i, j, type: "mobs", hit: mob.hit, name: mob.name || "" });
+      else d.push({ i, j, type: "mobs", hit: 0.0, name: "" });
     }
     d.sort((a, b) => {
       if (b.hit !== a.hit) return b.hit - a.hit;
-      if (-b.j !== -a.j) return -b.j - -a.j;
-      return -b.i - -a.i;
+      
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
     });
     return d;
   }
