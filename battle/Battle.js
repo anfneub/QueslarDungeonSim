@@ -67,10 +67,6 @@ export class Battle {
   }
 
   battle() {
-    console.log(this.fighters.all_fighters[0][0]);
-    console.log("\n");
-    console.log(this.fighters.all_fighters[1][1]);
-
 
     while (this.continue_flag) {
       this._do_one_round();
