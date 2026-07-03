@@ -21,11 +21,6 @@ export function getMobStatValue(baseValue, baseIncrement, level) {
     processedLevel += 300;
 
     if (processedLevel === 4500) {
-      // Growth resumes with one extra step at level 4500: from here on the
-      // per-level increment is 7x baseIncrement instead of 6x. Verified against
-      // an in-game monster stat block at level 7056 (defense 388,925 => level
-      // factor 38,892 exactly = 6*(7056-1000) + (7056-4500); damage 1.94m and
-      // health 15.56m match the same factor).
       increment += baseIncrement;
     } else if (processedLevel >= 2100) {
       // Limit additional growth in scaling

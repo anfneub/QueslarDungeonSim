@@ -1,5 +1,5 @@
-2026-07-02
-- Mob scaling: growth increment steps up once more (+1x baseIncrement) at level 4500, verified against an in-game monster stat block at level 7056. Mobs above 4500 were previously understated (about 7% at lvl 7000).
+2026-07-03
+- Mob scaling increment steps up once more at level 4500 (thanks to Anomaly Union)
 
 2026-06-17
 - Corrected max level before scaling stops from 2400 to 2100 
