@@ -1,7 +1,4 @@
 2026-07-07
-- High-level mob scaling: increment grows every 200 levels above 6700 (not 300) — verified on nine stat blocks 7597-7973
-
-2026-07-07
 - Added mob scaling for level above 6700
 
 2026-07-03

@@ -37,10 +37,6 @@ export function getMobStatValue(baseValue, baseIncrement, level) {
   let currentLevel = level - 6700;
   let increment = 14 * baseIncrement;
 
-  // Above the 6700 step the increment grows by 1x baseIncrement every 200
-  // levels (segments [6700,6900), [6900,7100), ... — verified exact against
-  // nine in-game stat blocks from 7597 to 7973, including the slope changes
-  // at 7700 and 7900).
   while (currentLevel > 200) {
     totalValue += increment * 200;
     currentLevel -= 200;
