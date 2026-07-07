@@ -1,3 +1,6 @@
+2026-07-07
+- Added mob scaling for level above 6700
+
 2026-07-03
 - Mob scaling increment steps up once more at level 4500 (thanks to Anomaly Union)
 

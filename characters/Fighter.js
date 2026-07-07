@@ -61,6 +61,7 @@ export class Fighter {
     this.damage = Math.ceil(100 + 25 * fighter_damage) + object_damage;
     this.hit = Math.ceil(50 + 50 * fighter_hit) + object_hit;
     this.defense_pre = 25 + 10 * fighter_defense + object_defense;
+    this.defense_pre_print = 25 + 10 * fighter_defense;
     this.defense = calculateDefense(this.defense_pre);
     this.crit_damage = (0.0 + 0.25 * fighter_crit + object_crit) / 100.0;
     this.crit_chance = 0.1 + object_crit_chance / 100.0;
@@ -80,7 +81,7 @@ export class Fighter {
 
 
   toString() {
-    return `I am ${this.name}, a ${this.fighter_class} with Health: ${this.current_health}/${this.total_health}, Damage: ${this.damage}, Hit: ${this.hit}, Defense: ${(100 * this.defense).toFixed(2)}%, Crit Chance: ${(100 * this.crit_chance).toFixed(2)}%, Crit Damage: ${(100 * this.crit_damage).toFixed(2)}%, Dodge: ${this.dodge}%`;
+    return `I am ${this.name}, a ${this.fighter_class} with Health: ${this.current_health}/${this.total_health}, Damage: ${this.damage}, Hit: ${this.hit}, Defense: ${(100 * this.defense).toFixed(2)}%, Defense pre: ${this.defense_pre_print}, Crit Chance: ${(100 * this.crit_chance).toFixed(2)}%, Crit Damage: ${(100 * this.crit_damage).toFixed(2)}%, Dodge: ${this.dodge}`;
   }
 
 }

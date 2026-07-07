@@ -10,26 +10,30 @@ export function getMobStatValue(baseValue, baseIncrement, level) {
     return baseValue + baseIncrement * level;
   }
 
-  let totalValue = baseValue + baseIncrement * 600;
-  let currentLevel = level - 600;
-  let increment = 2 * baseIncrement;
-  let processedLevel = 600;
+  if (level < 6700) {
+    let totalValue = baseValue + baseIncrement * 600;
+    let currentLevel = level - 600;
+    let increment = 2 * baseIncrement;
+    let processedLevel = 600;
 
-  while (currentLevel > 300) {
-    totalValue += increment * 300;
-    currentLevel -= 300;
-    processedLevel += 300;
+    while (currentLevel > 300) {
+      totalValue += increment * 300;
+      currentLevel -= 300;
+      processedLevel += 300;
 
-    if (processedLevel === 4500) {
-      increment += baseIncrement;
-    } else if (processedLevel >= 2100) {
-      // Limit additional growth in scaling
-    } else {
-      increment += baseIncrement;
+      if (processedLevel === 4500) {
+        increment += baseIncrement;
+      } else if (processedLevel >= 2100) {
+        // Limit additional growth in scaling
+      } else {
+        increment += baseIncrement;
+      }
     }
+
+    return totalValue + currentLevel * increment;
   }
 
-  return totalValue + currentLevel * increment;
+  return baseValue + baseIncrement * (8 * (6700 - 1500) + 14 * (level - 6700));
 }
 
 export class Mob {
@@ -44,7 +48,8 @@ export class Mob {
     this.current_health = this.total_health;
     this.damage = getMobStatValue(25, 50, this.level);
     this.hit = getMobStatValue(0, 50, this.level);
-    this.defense = calculateDefense(getMobStatValue(5, 10, this.level));
+    this.defense_pre = getMobStatValue(5, 10, this.level);
+    this.defense = calculateDefense(this.defense_pre);
     this.crit_damage = 0.0;
     this.crit_chance = 0.0;
     this.dodge = getMobStatValue(0, 50, this.level);
@@ -53,6 +58,6 @@ export class Mob {
   }
 
   toString() {
-    return `I am a level ${this.level} ${this.mob_class} with Health: ${this.current_health}/${this.total_health}, Damage: ${this.damage}, Hit: ${this.hit}, Defense: ${(100 * this.defense).toFixed(2)}%, Crit: ${(100 * this.crit).toFixed(2)}%, Dodge: ${this.dodge}`;
+    return `I am a level ${this.level} ${this.mob_class} with Health: ${this.current_health}/${this.total_health}, Damage: ${this.damage}, Hit: ${this.hit}, Defense: ${(100 * this.defense).toFixed(2)}%, Defense pre: ${this.defense_pre}, Crit: ${(100 * this.crit).toFixed(2)}%, Dodge: ${this.dodge}`;
   }
 }
