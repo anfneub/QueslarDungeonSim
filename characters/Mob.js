@@ -33,7 +33,28 @@ export function getMobStatValue(baseValue, baseIncrement, level) {
     return totalValue + currentLevel * increment;
   }
 
-  return baseValue + baseIncrement * (8 * (6700 - 1500) + 14 * (level - 6700));
+  let totalValue = baseValue + baseIncrement * (8 * (6700 - 1500));
+  let currentLevel = level - 6700;
+  let increment = 14 * baseIncrement;
+  let processedLevel = 6700;
+
+  const firstStep = 300 - (processedLevel % 300);
+  if (currentLevel <= firstStep) {
+    return totalValue + currentLevel * increment;
+  }
+  totalValue += increment * firstStep;
+  currentLevel -= firstStep;
+  processedLevel += firstStep;
+  increment += baseIncrement;
+
+  while (currentLevel > 300) {
+    totalValue += increment * 300;
+    currentLevel -= 300;
+    processedLevel += 300;
+    increment += baseIncrement;
+  }
+
+  return totalValue + currentLevel * increment;
 }
 
 export class Mob {
