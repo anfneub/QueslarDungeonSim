@@ -100,6 +100,20 @@
   "stat_thorns": "Thorns",
   "stat_regen": "Regen",
   "stat_healing": "Healing",
+  "optimizer_tab": "Build Optimizer",
+  "start_optimization": "Start Optimization",
+  "apply_build": "Apply Build to Dungeon Tab",
+  "results": "Optimization Results",
+  "optimizer_target_dungeon_level": "Target Dungeon Level",
+  "optimizer_gold_budget": "Available Gold Budget",
+  "optimizer_gold_budget_placeholder": "e.g. 24.92b",
+  "optimize_from_zero": "Use zeroed fighters<span class=\"info-icon\" tabindex=\"0\" data-tooltip=\"optimize_from_zero_tooltip\"></span>",
+  "optimize_from_zero_tooltip": "If on, optimization uses fighters without any pre-assigned stats. If off, it starts from each fighter's current stats and tries to reassign them.",
+  "toggle_off": "Off",
+  "toggle_on": "On",
+  "optimizer_results_placeholder": "Run optimization to see stats distribution.",
+  "optimizer_howto_title": "How to Use",
+  "optimizer_howto_body": "The optimizer searches for the stat distribution that clears your target dungeon level for the lowest gold cost.<ul><li>Your fighters must already be placed in the Battle Formation grid on the Dungeon tab in this order:<div class=\"howto-formation-diagram\"><div class=\"howto-formation-cell\">Shadow Dancer</div><div class=\"howto-formation-cell\">Bastion</div><div class=\"howto-formation-cell\">Berserker</div><div class=\"howto-formation-cell\">Crusader</div><div class=\"howto-formation-cell\">Paladin</div><div class=\"howto-formation-cell\">Priest</div></div></li><li>Choose the dungeon level you want to optimize against. It's advised not to aim too far ahead of your current progress, as some levels may simply not be optimized given the current constraints. Conversely, if the target level is one you can already clear with a consistent win rate, no optimization is applied.</li><li>Turning on \"Use zeroed fighters\" lets the optimizer search from a blank slate instead of your fighters' current stats. This might find a better distribution, but takes longer to compute.</li><li>In the current state of the game, stats impact is marginal compared to fighter items, so stat optimization may only produce marginal gains.</li></ul>",
   "class_descriptions": {
     "assassin": "The assassin prioritises the back column first",
     "brawler": "The brawler has 15% chance to attack twice",
@@ -226,5 +240,20 @@
   "MobInfo": {
     "MOB": "Mob",
     "BOSS": "Boss"
+  },
+  "OptimizerInfo": {
+    "NO_FIGHTERS": "No fighters in formation. Add fighters to the grid first.",
+    "LAYOUT_COUNT_MISMATCH": "⚠ Formation must have exactly {0} fighters in the fixed layout (found {1}). No optimization was run.",
+    "LAYOUT_SLOT_EMPTY": "⚠ Formation layout mismatch: expected {0} at row {1}, column {2}, but that slot is empty. No optimization was run.",
+    "LAYOUT_SLOT_MISMATCH": "⚠ Formation layout mismatch: expected {0} at row {1}, column {2}, but found {3}. No optimization was run.",
+    "BUILD_NOT_FOUND": "⚠ Failed to find a valid build for dungeon level {0}. The level may be too high for this formation.",
+    "BUDGET_INSUFFICIENT": "⚠ Budget of {0} is insufficient to reach even a {1}% win rate at dungeon level {2}. Try a lower level or a higher budget.",
+    "RESULTS_HEADER": "--- Optimization Results for Dungeon Level {0} ---",
+    "WIN_RATE_FAILED": "Win Rate: {0}% — FAILED: no valid build found.",
+    "WIN_RATE_UNSTABLE": "Win Rate: {0}% — UNSTABLE: build is very unreliable.",
+    "WIN_RATE": "Win Rate: {0}%",
+    "TOTAL_COST_WITH_BUDGET": "Total Cost: {0} — {1} remaining from {2} budget",
+    "TOTAL_COST": "Total Cost: {0}",
+    "RUNNING": "Optimizing… (this may take a few seconds)"
   }
 }

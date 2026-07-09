@@ -100,6 +100,20 @@
   "stat_thorns": "荆棘",
   "stat_regen": "再生",
   "stat_healing": "治疗",
+  "optimizer_tab": "优化器",
+  "start_optimization": "开始优化",
+  "apply_build": "将配置应用到地下城标签",
+  "results": "优化结果",
+  "optimizer_target_dungeon_level": "目标地下城等级",
+  "optimizer_gold_budget": "可用金币预算",
+  "optimizer_gold_budget_placeholder": "例如：24.92b",
+  "optimize_from_zero": "使用零属性战士<span class=\"info-icon\" tabindex=\"0\" data-tooltip=\"optimize_from_zero_tooltip\"></span>",
+  "optimize_from_zero_tooltip": "启用后，优化将使用未分配任何属性的战士进行计算。禁用后，优化将从每位战士当前的属性开始，并尝试重新分配它们。",
+  "toggle_off": "关",
+  "toggle_on": "开",
+  "optimizer_results_placeholder": "运行优化以查看属性分配情况。",
+  "optimizer_howto_title": "使用说明",
+  "optimizer_howto_body": "优化器会寻找能以最低金币成本通过目标地下城等级的属性分配。<ul><li>你的战士必须已经按照以下顺序放置在“地下城”标签页的战斗编队格子中：<div class=\"howto-formation-diagram\"><div class=\"howto-formation-cell\">暗影舞者</div><div class=\"howto-formation-cell\">堡垒</div><div class=\"howto-formation-cell\">狂战士</div><div class=\"howto-formation-cell\">十字军</div><div class=\"howto-formation-cell\">圣骑士</div><div class=\"howto-formation-cell\">牧师</div></div></li><li>选择你想要优化的目标地下城等级。建议不要选择远超当前进度的等级，因为在当前限制条件下，有些等级可能根本无法被优化。反之，如果目标等级你已经能以稳定的胜率通过，则不会应用任何优化。</li><li>开启“使用零属性战士”后，优化器会从空白属性开始搜索，而不是从战士当前的属性开始。这样可能会找到更好的分配方案，但计算时间会更长。</li><li>在游戏当前的状态下，属性带来的影响相对战士装备而言是有限的，因此优化属性可能只会带来有限的提升。</li></ul>",
   "class_descriptions": {
     "assassin": "刺客优先攻击后排",
     "brawler": "格斗家有15%的几率攻击两次",
@@ -226,5 +240,20 @@
   "MobInfo": {
     "MOB": "怪物",
     "BOSS": "Boss"
+  },
+  "OptimizerInfo": {
+    "NO_FIGHTERS": "阵型中没有佣兵。请先在网格中添加佣兵。",
+    "LAYOUT_COUNT_MISMATCH": "⚠ 固定阵型必须正好有 {0} 名佣兵（当前为 {1} 名）。未执行优化。",
+    "LAYOUT_SLOT_EMPTY": "⚠ 阵型不匹配：第 {1} 行第 {2} 列应为 {0}，但该位置为空。未执行优化。",
+    "LAYOUT_SLOT_MISMATCH": "⚠ 阵型不匹配：第 {1} 行第 {2} 列应为 {0}，但实际为 {3}。未执行优化。",
+    "BUILD_NOT_FOUND": "⚠ 未能为地下城等级 {0} 找到有效配置。该等级可能对此阵型来说过高。",
+    "BUDGET_INSUFFICIENT": "⚠ {0} 的预算不足以在地下城等级 {2} 达到 {1}% 的胜率。请尝试更低的等级或更高的预算。",
+    "RESULTS_HEADER": "--- 地下城等级 {0} 的优化结果 ---",
+    "WIN_RATE_FAILED": "胜率：{0}% — 失败：未找到有效配置。",
+    "WIN_RATE_UNSTABLE": "胜率：{0}% — 不稳定：该配置非常不可靠。",
+    "WIN_RATE": "胜率：{0}%",
+    "TOTAL_COST_WITH_BUDGET": "总花费：{0} — 从 {2} 预算中剩余 {1}",
+    "TOTAL_COST": "总花费：{0}",
+    "RUNNING": "优化中……（这可能需要几秒钟）"
   }
 }

@@ -5,7 +5,8 @@ import { Battle } from "./battle/Battle.js";
 import { Fighter, FighterClasses } from "./characters/Fighter.js";
 import { I18nManager, formatString } from "./utils/i18n.js";
 import { ArmoryItem } from "./armory/ArmoryItem.js";
-import { calculateFighterCost, millify, calculateTierLevel, MAX_TIER } from "./utils/utils.js";
+import { calculateFighterCost, millify, demillify, calculateTierLevel, MAX_TIER } from "./utils/utils.js";
+import { Optimizer } from "./optimizer/Optimizer.js";
 
 // --- GLOBAL SHARED ELEMENTS ---
 const importConfirmModal = document.getElementById("importConfirmModal");
@@ -440,7 +441,7 @@ class DungeonSim {
             else if (statType.includes("regen")) bonuses.object_regen += value;
             else if (statType.includes("healing")) bonuses.object_healing += value;
         });
-        console.log(bonuses.object_crit_chance)
+        // console.log(bonuses.object_crit_chance)
         return bonuses;
     }
 
@@ -1386,6 +1387,7 @@ class DungeonSim {
             }
             const data = await response.json();
             const result = this.processImportedData(data);
+            if (result.success && this.tabName === 'dungeon') updateOptimizerBudgetFromGrid();
             if (!result.success) {
                 console.warn(I18N.getConsoleMsg("ERR_IMPORT_FAIL"), result.message);
                 alert(result.message);
@@ -1728,7 +1730,31 @@ function createFighterFromApiData(apiData) {
 }
 
 // --- INITIALIZATION ---
-let dungeonSim, cavesSim, activeSim;
+let dungeonSim, cavesSim, activeSim, optimizer;
+let currentOptimizedBuild = null;
+let optBudgetEl = null;
+
+function updateOptimizerBudgetFromGrid() {
+    if (!optBudgetEl) return;
+    let totalCost = 0;
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 2; j++) {
+            const fighter = dungeonSim.gridState[i][j];
+            if (fighter && fighter.__raw) {
+                totalCost += calculateFighterCost({
+                    fighter_health: fighter.__raw.fighter_health || 0,
+                    fighter_damage: fighter.__raw.fighter_damage || 0,
+                    fighter_hit: fighter.__raw.fighter_hit || 0,
+                    fighter_defense: fighter.__raw.fighter_defense || 0,
+                    fighter_crit: fighter.__raw.fighter_crit || 0,
+                    fighter_dodge: fighter.__raw.fighter_dodge || 0,
+                });
+            }
+        }
+    }
+    optBudgetEl.value = millify(totalCost);
+    localStorage.setItem("optimizer:budget", optBudgetEl.value);
+}
 
 function initializeApp() {
     const mainTabs = document.querySelector('.main-tabs');
@@ -1744,10 +1770,14 @@ function initializeApp() {
             document.getElementById(`${tabId}-content`).classList.add('active');
             localStorage.setItem('activeTab', tabId);
 
-            activeSim = (tabId === 'dungeon') ? dungeonSim : cavesSim;
-            activeSim.renderGrid();
-            activeSim.renderBench();
-            activeSim.renderArmory();
+            if (tabId === 'optimizer') {
+                activeSim = null;
+            } else {
+                activeSim = (tabId === 'dungeon') ? dungeonSim : cavesSim;
+                activeSim.renderGrid();
+                activeSim.renderBench();
+                activeSim.renderArmory();
+            }
         }
     });
 
@@ -1755,20 +1785,30 @@ function initializeApp() {
     cavesSim = new DungeonSim('caves');
 
     const savedTabId = localStorage.getItem('activeTab') || 'dungeon';
-    activeSim = (savedTabId === 'dungeon') ? dungeonSim : cavesSim;
+    if (savedTabId !== 'optimizer') {
+        activeSim = (savedTabId === 'dungeon') ? dungeonSim : cavesSim;
+    } else {
+        activeSim = null;
+    }
 
     mainTabs.querySelectorAll('.main-tab-button').forEach(btn => btn.classList.remove('active'));
     tabContents.forEach(content => content.classList.remove('active'));
-    mainTabs.querySelector(`[data-tab="${savedTabId}"]`).classList.add('active');
-    document.getElementById(`${savedTabId}-content`).classList.add('active');
+    
+    const targetTabButton = mainTabs.querySelector(`[data-tab="${savedTabId}"]`);
+    if (targetTabButton) targetTabButton.classList.add('active');
+    
+    const targetTabContent = document.getElementById(`${savedTabId}-content`);
+    if (targetTabContent) targetTabContent.classList.add('active');
 
     dungeonSim.init();
     cavesSim.init();
 
     // Explicitly re-render the active sim's content to ensure it's displayed correctly on load
-    activeSim.renderGrid();
-    activeSim.renderBench();
-    activeSim.renderArmory();
+    if (activeSim) {
+        activeSim.renderGrid();
+        activeSim.renderBench();
+        activeSim.renderArmory();
+    }
 
     saveFighterBtn.addEventListener("click", () => activeSim.saveFighter());
     closeFighterModal.addEventListener("click", () => activeSim.closeFighterEditor());
@@ -1812,6 +1852,119 @@ function initializeApp() {
     for (const id of statInputs) {
         document.getElementById(id).addEventListener("input", () => activeSim.updateModifiedFighterCost());
     }
+
+    // --- OPTIMIZER EVENT LISTENERS ---
+    const startOptimizeBtn = document.getElementById("startOptimize");
+    const applyOptimizerBuildBtn = document.getElementById("applyOptimizerBuild");
+    const optDungeonLevelInput = document.getElementById("optDungeonLevel");
+    const optFromZeroCheckbox = document.getElementById("optFromZero");
+    const optResultsDiv = document.getElementById("optResults");
+    const optProgressContainer = document.getElementById("optProgressContainer");
+    const optProgressBar = document.getElementById("optProgressBar");
+    const optProgressLabel = document.getElementById("optProgressLabel");
+
+    optimizer = new Optimizer();
+    optBudgetEl = document.getElementById("optBudget");
+    const savedBudget = localStorage.getItem("optimizer:budget");
+    if (savedBudget) optBudgetEl.value = savedBudget;
+    optBudgetEl.addEventListener("input", () => localStorage.setItem("optimizer:budget", optBudgetEl.value));
+
+    const savedDungeonLevel = localStorage.getItem("optimizer:dungeonLevel");
+    if (savedDungeonLevel) optDungeonLevelInput.value = savedDungeonLevel;
+    optDungeonLevelInput.addEventListener("input", () => localStorage.setItem("optimizer:dungeonLevel", optDungeonLevelInput.value));
+
+    startOptimizeBtn.addEventListener("click", async () => {
+        const level = parseInt(optDungeonLevelInput.value, 10);
+        if (isNaN(level) || level <= 0) return;
+
+        startOptimizeBtn.disabled = true;
+        optResultsDiv.removeAttribute("data-i18n");
+        optResultsDiv.textContent = I18N.getOptimizerMsg("RUNNING");
+        optProgressContainer.style.display = "none";
+        optProgressBar.style.width = "0%";
+        optProgressLabel.textContent = "0%";
+
+        // Build fightersInfo: class + item bonuses + current invested stats for each occupied grid cell.
+        const fightersInfo = [];
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 2; y++) {
+                const fighter = dungeonSim.gridState[x][y];
+                if (!fighter) continue;
+                const item = dungeonSim.armoryState.find(
+                    i => i.id === fighter.equippedItemId || i._id === fighter.equippedItemId
+                );
+                const itemBonuses = item ? dungeonSim.getBonusesFromItem(item) : {};
+                const raw = optFromZeroCheckbox.checked ? {} : (fighter.__raw || {});
+                const currentStats = {
+                    fighter_health: raw.fighter_health || 0,
+                    fighter_damage: raw.fighter_damage || 0,
+                    fighter_hit: raw.fighter_hit || 0,
+                    fighter_defense: raw.fighter_defense || 0,
+                    fighter_crit: raw.fighter_crit || 0,
+                    fighter_dodge: raw.fighter_dodge || 0,
+                };
+                fightersInfo.push({ pos: [x, y], class: fighter.fighter_class, itemBonuses, currentStats });
+            }
+        }
+
+        // Yield once so the "Optimizing…" message renders before the heavy work starts.
+        await new Promise(r => setTimeout(r, 50));
+
+        let budget = Infinity;
+        if (optBudgetEl.value.trim()) {
+            try { budget = demillify(optBudgetEl.value.trim()); } catch (_) {}
+        }
+        // The seed-round sweep this bar tracks only runs on the budget-constrained path.
+        if (budget < Infinity) optProgressContainer.style.display = "block";
+        const result = await optimizer.optimize(level, fightersInfo, budget, (done, total) => {
+            const pct = Math.round((done / total) * 100);
+            optProgressBar.style.width = `${pct}%`;
+            optProgressLabel.textContent = `${pct}%`;
+        });
+        optResultsDiv.textContent = result.text;
+        currentOptimizedBuild = result.build;
+        startOptimizeBtn.disabled = false;
+        optProgressContainer.style.display = "none";
+    });
+
+    applyOptimizerBuildBtn.addEventListener("click", () => {
+        if (!currentOptimizedBuild) {
+            alert("Please run the optimizer first.");
+            return;
+        }
+
+        // Apply to dungeon sim
+        for (const fBuild of currentOptimizedBuild.fighters) {
+            const [x, y] = fBuild.pos;
+            let fighter = dungeonSim.gridState[x][y];
+            
+            // If there's no fighter or the class is wrong, create a new one
+            if (!fighter || fighter.fighter_class !== fBuild.class) {
+                const fighterData = {
+                    name: `Opt ${fBuild.class}`,
+                    ...fBuild.stats
+                };
+                fighter = new Fighter(fBuild.class, fighterData);
+                fighter.__raw = { ...fighterData };
+                dungeonSim.gridState[x][y] = fighter;
+            } else {
+                // Otherwise just update base stats, preserving the item
+                const data = fighter.__raw || {};
+                const newData = { ...data, ...fBuild.stats };
+                newData.equippedItemId = fighter.equippedItemId; // Keep the same item
+                
+                const newFighter = new Fighter(fBuild.class, newData);
+                newFighter.__raw = { ...newData };
+                dungeonSim.gridState[x][y] = newFighter;
+            }
+        }
+        
+        dungeonSim.saveState();
+        if (activeSim === dungeonSim) {
+            dungeonSim.renderGrid();
+        }
+        alert("Build applied to Dungeon tab!");
+    });
 }
 
 function setupModalBackdropClose(modalElement, closeFunction) {

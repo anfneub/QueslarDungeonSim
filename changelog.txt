@@ -1,3 +1,6 @@
+2026-07-09
+- INTRODUCING: Optimizer. Lets you optimize your stat for a psecific build
+
 2026-07-07
 - Added mob scaling for level above 6700
 

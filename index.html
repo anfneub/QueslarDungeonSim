@@ -21,6 +21,7 @@
             <div class="main-tabs" style="display: flex; align-items: center;">
                 <button class="main-tab-button active" data-tab="dungeon" data-i18n="dungeon_tab">Dungeon</button>
                 <button class="main-tab-button" data-tab="caves" data-i18n="caves_tab">Caves</button>
+                <button class="main-tab-button" data-tab="optimizer" data-i18n="optimizer_tab">Build Optimizer</button>
                 <span tabindex="0" data-tooltip="experimental_implicits" class="warning-icon">⚠️</span>
             </div>
         </div>
@@ -308,6 +309,88 @@
                 <div id="armoryGrid-caves" class="armory-grid"></div>
                 <div id="addToArmory-caves" class="add-to-bench" data-i18n="add_fighter_item">
                     + Add Fighter Item
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="optimizer-content" class="tab-content">
+        <div class="app-layout" style="margin-top: -1.4em; justify-content: center; align-items: flex-start;">
+            <div class="main-content" style="max-width: 800px; width: 100%;">
+                <div class="form-grid optimizer-grid">
+                    <div class="card">
+                        <label class="label" data-i18n="optimizer_target_dungeon_level">Target Dungeon Level</label>
+                        <input id="optDungeonLevel" type="number" value="200" min="1" step="1" style="width: 150px"
+                            autocomplete="off" />
+                    </div>
+                    <div class="card">
+                        <label class="label" data-i18n="optimizer_gold_budget">Available Gold Budget</label>
+                        <input id="optBudget" type="text" value="" style="width: 150px"
+                            placeholder="e.g. 24.92b" data-i18n-placeholder="optimizer_gold_budget_placeholder" autocomplete="off" />
+                    </div>
+                    <div class="card" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                        <label class="label" style="display: flex; align-items: center; justify-content: center;" data-i18n="optimize_from_zero">
+                            Optimize from 0 stats
+                            <span class="info-icon" tabindex="0"
+                                data-tooltip="If on, optimization starts from all fighters at 0 stats. If off, it starts from each fighter's current stats."></span>
+                        </label>
+                        <label class="toggle-switch">
+                            <input id="optFromZero" type="checkbox" autocomplete="off" />
+                            <span class="toggle-slider">
+                                <span class="toggle-slider-labels">
+                                    <span data-i18n="toggle_on">On</span>
+                                    <span data-i18n="toggle_off">Off</span>
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1em; margin-bottom: 0.6em;">
+                    <button id="startOptimize" class="btn" style="flex: 1; padding: 1.1em 1em; font-size: 1.15em;" data-i18n="start_optimization">
+                        Start Optimization
+                    </button>
+
+                    <button id="applyOptimizerBuild" class="btn secondary" style="flex: 1; padding: 1.1em 1em; font-size: 1.15em;" data-i18n="apply_build">
+                        Apply Build to Dungeon Tab
+                    </button>
+                </div>
+
+                <div id="optProgressContainer" style="display: none; margin-bottom: 1em;">
+                    <div style="background: #36405a; border: 1px solid #2c3242; border-radius: 8px; height: 1.4em; overflow: hidden; position: relative;">
+                        <div id="optProgressBar" style="background: #2563eb; height: 100%; width: 0%; transition: width 0.2s ease;"></div>
+                        <div id="optProgressLabel" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 700; color: #e6eaf3;">0%</div>
+                    </div>
+                </div>
+
+                <div class="card result-card">
+                    <div class="label" data-i18n="results">Optimization Results</div>
+                    <div id="optResults" class="result-text" data-i18n="optimizer_results_placeholder" style="white-space: pre-wrap; font-family: monospace;">
+                        Run optimization to see stats distribution.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card optimizer-howto">
+                <div class="label" data-i18n="optimizer_howto_title">How to Use</div>
+                <div data-i18n="optimizer_howto_body">
+                    The optimizer searches for the fighter build that clears your target dungeon level for the lowest gold cost.
+                    <ul>
+                        <li>
+                            Your fighters must already be placed in the Battle Formation grid on the Dungeon tab in this order:
+                            <div class="howto-formation-diagram">
+                                <div class="howto-formation-cell">Shadow Dancer</div>
+                                <div class="howto-formation-cell">Bastion</div>
+                                <div class="howto-formation-cell">Berserker</div>
+                                <div class="howto-formation-cell">Crusader</div>
+                                <div class="howto-formation-cell">Paladin</div>
+                                <div class="howto-formation-cell">Priest</div>
+                            </div>
+                        </li>
+                        <li>Choose the dungeon level you want to optimize against. It's advised not to aim too far ahead of your current progress, as some levels may simply not be optimized given the current constraints. Conversely, if the target level is one you can already clear with a consistent win rate, no optimization is applied.</li>
+                        <li>Turning on "Use zeroed fighters" lets the optimizer search from a blank slate instead of your fighters' current stats. This might find a better distribution, but takes longer to compute.</li>
+                        <li>In the current state of the game, stats impact is marginal compared to fighter items, so stat optimization may only produce marginal gains.</li>
+                    </ul>
                 </div>
             </div>
         </div>

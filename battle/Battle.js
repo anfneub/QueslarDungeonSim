@@ -68,6 +68,9 @@ export class Battle {
 
   battle() {
 
+    // console.log(this.fighters.all_fighters[0][0].toString());
+    // console.log(this.mobs.mobs[0][0].toString());
+
     while (this.continue_flag) {
       this._do_one_round();
       if (this.current_round > 300) break;
@@ -632,6 +635,9 @@ export class Battle {
     let attacker_crit_damage = attacker.crit_damage;
     let additional_dr = 0.0;
 
+    // console.log('Target Defense Pre: ' + target_defense_pre);
+
+
     // Update dead fighters
     this.update_dead_fighters();
 
@@ -693,6 +699,9 @@ export class Battle {
         return;
       }
     }
+
+    // console.log(attacker.toString())
+    // console.log(target.toString())
 
     // Bastion aura
     if (target instanceof Fighter && this.bastion_aura) {
@@ -756,6 +765,7 @@ export class Battle {
         dmg_amount = target_defense * (1 - additional_dr) * (1 - thorns / 100.0) * attacker_damage * damage_mult;
       } else {
         dmg_amount = target_defense * (1 - additional_dr) * attacker_damage * damage_mult;
+        let val = 1 - 1 / Math.pow(1 + (target_defense_pre * 10) / 50000, 0.25)
       }
       let dmg_for_thorns = target_defense * (1 - additional_dr) * attacker_damage * damage_mult;
       let damage_info_key = "DAMAGE_INFO";

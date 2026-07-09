@@ -173,6 +173,15 @@ export class I18nManager {
         return this.getTranslation(`BattleInfo.${id.toUpperCase()}`);
     }
 
+    /**
+     *
+     * @param {*} id
+     * @returns Localized Optimizer output message
+     */
+    getOptimizerMsg(id) {
+        return this.getTranslation(`OptimizerInfo.${id.toUpperCase()}`);
+    }
+
     getMobInfo() {
         return this.getTranslation(`MobInfo`);
     }
