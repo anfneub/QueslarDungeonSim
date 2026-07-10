@@ -113,7 +113,7 @@
   "toggle_on": "开",
   "optimizer_results_placeholder": "运行优化以查看属性分配情况。",
   "optimizer_howto_title": "使用说明",
-  "optimizer_howto_body": "优化器会寻找能以最低金币成本通过目标地下城等级的属性分配。<ul><li>你的战士必须已经按照以下顺序放置在“地下城”标签页的战斗编队格子中：<div class=\"howto-formation-diagram\"><div class=\"howto-formation-cell\">暗影舞者</div><div class=\"howto-formation-cell\">堡垒</div><div class=\"howto-formation-cell\">狂战士</div><div class=\"howto-formation-cell\">十字军</div><div class=\"howto-formation-cell\">圣骑士</div><div class=\"howto-formation-cell\">牧师</div></div></li><li>选择你想要优化的目标地下城等级。建议不要选择远超当前进度的等级，因为在当前限制条件下，有些等级可能根本无法被优化。反之，如果目标等级你已经能以稳定的胜率通过，则不会应用任何优化。</li><li>开启“使用零属性战士”后，优化器会从空白属性开始搜索，而不是从战士当前的属性开始。这样可能会找到更好的分配方案，但计算时间会更长。</li><li>在游戏当前的状态下，属性带来的影响相对战士装备而言是有限的，因此优化属性可能只会带来有限的提升。</li></ul>",
+  "optimizer_howto_body": "优化器会寻找能以最低金币成本通过目标地下城等级的属性分配。<ul><li>你的战士必须已经按照以下顺序放置在“地下城”标签页的战斗编队格子中：<div class=\"howto-formation-diagram\"><div class=\"howto-formation-cell\">暗影舞者</div><div class=\"howto-formation-cell\">堡垒</div><div class=\"howto-formation-cell\">狂战士</div><div class=\"howto-formation-cell\">十字军 / 牧师</div><div class=\"howto-formation-cell\">圣骑士</div><div class=\"howto-formation-cell\">牧师 / 十字军</div></div></li><li>选择你想要优化的目标地下城等级。建议不要选择远超当前进度的等级，因为在当前限制条件下，有些等级可能根本无法被优化。反之，如果目标等级你已经能以稳定的胜率通过，则不会应用任何优化。</li><li>开启“使用零属性战士”后，优化器会从空白属性开始搜索，而不是从战士当前的属性开始。这样可能会找到更好的分配方案，但计算时间会更长。</li><li>在游戏当前的状态下，属性带来的影响相对战士装备而言是有限的，因此优化属性可能只会带来有限的提升。</li></ul>",
   "class_descriptions": {
     "assassin": "刺客优先攻击后排",
     "brawler": "格斗家有15%的几率攻击两次",

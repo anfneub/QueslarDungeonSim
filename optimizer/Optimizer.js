@@ -7,10 +7,13 @@ import { solveDamageAllocation } from "./DamageModel.js";
 import { formatString } from "../utils/i18n.js";
 
 // The formation is fixed: column 1 (y=0) is Shadow Dancer / Berserker /
-// Paladin top-to-bottom, column 2 (y=1) is Bastion / Crusader / Priest. The
-// optimizer assumes this exact layout (it's load-bearing for the analytical
-// damage model's class-specific assumptions) — if the grid doesn't match,
-// refuse to compute rather than silently optimizing the wrong thing.
+// Paladin top-to-bottom, column 2 (y=1) is Bastion, then Crusader/Priest in
+// either order at row 2 / row 3 (see SWAPPABLE_GROUPS below — neither class
+// has any position-dependent mechanic, so either arrangement is valid). The
+// optimizer assumes this exact layout otherwise (it's load-bearing for the
+// analytical damage model's class-specific assumptions) — if the grid
+// doesn't match, refuse to compute rather than silently optimizing the wrong
+// thing.
 const REQUIRED_LAYOUT = {
     '0-0': FighterClasses.SHADOW_DANCER,
     '1-0': FighterClasses.BERSERKER,
@@ -19,6 +22,14 @@ const REQUIRED_LAYOUT = {
     '1-1': FighterClasses.CRUSADER,
     '2-1': FighterClasses.PRIEST,
 };
+// Groups of positions whose REQUIRED_LAYOUT classes may be swapped with each
+// other and still be considered a valid layout — e.g. row 2/row 3 of column
+// 2 (keys '1-1'/'2-1') may hold Crusader/Priest in either order. Every key
+// in a group must appear together; a group is only ever checked as a whole
+// (see _checkLayout).
+const SWAPPABLE_GROUPS = [
+    ['1-1', '2-1'],
+];
 
 // Win rate target when no budget is given (minimize cost to achieve this).
 const DESCENT_TARGET = 0.80;
@@ -615,9 +626,11 @@ export class Optimizer {
 
     _key(pos)   { return `${pos[0]}-${pos[1]}`; }
 
-    // Returns an error string if fightersInfo doesn't exactly match
-    // REQUIRED_LAYOUT (right count, right positions, right class per
-    // position); returns null (no error) if it matches.
+    // Returns an error string if fightersInfo doesn't match REQUIRED_LAYOUT
+    // (right count, right positions, right class per position) — except
+    // positions inside a SWAPPABLE_GROUPS group, which are checked as a set
+    // rather than position-by-position, so any permutation within the group
+    // is accepted. Returns null (no error) if it matches.
     _checkLayout(fightersInfo) {
         const requiredKeys = Object.keys(REQUIRED_LAYOUT);
 
@@ -630,7 +643,11 @@ export class Optimizer {
             seen.set(this._key(fi.pos), fi.class);
         }
 
+        const swappableKeys = new Set(SWAPPABLE_GROUPS.flat());
+
         for (const key of requiredKeys) {
+            if (swappableKeys.has(key)) continue; // checked per-group below
+
             const expected = REQUIRED_LAYOUT[key];
             const actual = seen.get(key);
             const [x, y] = key.split('-');
@@ -639,6 +656,29 @@ export class Optimizer {
             }
             if (actual !== expected) {
                 return formatString(window.i18nManager.getOptimizerMsg("LAYOUT_SLOT_MISMATCH"), expected, x, y, actual);
+            }
+        }
+
+        for (const group of SWAPPABLE_GROUPS) {
+            const expectedClasses = group.map(key => REQUIRED_LAYOUT[key]);
+            const expectedLabel = expectedClasses.join('/');
+
+            for (const key of group) {
+                const actual = seen.get(key);
+                const [x, y] = key.split('-');
+                if (actual === undefined) {
+                    return formatString(window.i18nManager.getOptimizerMsg("LAYOUT_SLOT_EMPTY"), expectedLabel, x, y);
+                }
+                if (!expectedClasses.includes(actual)) {
+                    return formatString(window.i18nManager.getOptimizerMsg("LAYOUT_SLOT_MISMATCH"), expectedLabel, x, y, actual);
+                }
+            }
+
+            const actualClasses = group.map(key => seen.get(key));
+            if (new Set(actualClasses).size !== new Set(expectedClasses).size) {
+                // Both slots got the same class instead of one of each.
+                const [x, y] = group[0].split('-');
+                return formatString(window.i18nManager.getOptimizerMsg("LAYOUT_SLOT_MISMATCH"), expectedLabel, x, y, actualClasses[0]);
             }
         }
 

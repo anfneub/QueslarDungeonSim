@@ -262,7 +262,7 @@ h1 {
     grid-template-rows: repeat(3, auto);
     gap: 0.3em;
     margin: 0.5em 0 0.2em;
-    max-width: 190px;
+    max-width: 250px;
 }
 
 .howto-formation-cell {

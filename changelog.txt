@@ -1,3 +1,7 @@
+2026-07-10
+- Added possibility to optimize with crudaser and priest swapped
+
+
 2026-07-09
 - INTRODUCING: Optimizer. Lets you optimize your stat for a psecific build
 
